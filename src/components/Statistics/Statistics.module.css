@@ -1,0 +1,22 @@
+.statisticsTitle {
+  color: rgb(135, 112, 167);
+}
+.spanWrap {
+  display: flex;
+  flex-direction: column;
+}
+.statGood {
+  color: green;
+}
+.statNeutral {
+  color: orange;
+}
+.statBad {
+  color: red;
+}
+.statTotal {
+  color: blueviolet;
+}
+.statPercetage {
+  color: black;
+}
