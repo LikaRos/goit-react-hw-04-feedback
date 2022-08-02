@@ -1,7 +1,8 @@
+import { useState } from 'react';
+
 import { FeedbackOption } from './FeedbackOption/FeedbackOption';
 import { Statistics } from './Statistics/Statistics';
 import Section from './Section/Section';
-import { Component } from 'react';
 
 const options = [
   { name: 'good', title: 'Good', id: 1 },
@@ -9,28 +10,20 @@ const options = [
   { name: 'bad', title: 'Bad', id: 3 },
 ];
 
-export class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+export function App() {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
-  /* Функция  с формулой*/
-  //   countTotalFeedback = () => {
-  //     const totalFeedback = this.state.good + this.state.neutral + this.state.bad;
-  //     return totalFeedback;
-  //   };
+  const state = { good, neutral, bad };
 
-  countTotalFeedback = () => {
-    const totalFeedback = Object.values(this.state);
+  const countTotalFeedback = () => {
+    const totalFeedback = Object.values(state);
     return totalFeedback.reduce((acc, elem) => acc + elem);
   };
 
-  countPositiveFeedbackPercentage = () => {
-    const posPercentage = Math.round(
-      (this.state.good / this.countTotalFeedback()) * 100
-    );
+  const countPositiveFeedbackPercentage = () => {
+    const posPercentage = Math.round((good / countTotalFeedback()) * 100);
     if (!posPercentage) {
       return 0;
     } else {
@@ -38,47 +31,51 @@ export class App extends Component {
     }
   };
 
-  onFeedback = event => {
-    console.log(event.target);
-    const { name } = event.target; // name -> Good
+  const handleUpdate = event => {
+    const { name } = event.target;
+    switch (name) {
+      case 'good':
+        setGood(prevState => prevState + 1);
+        break;
 
-    this.setState(prevState => {
-      const prevStateValue = prevState[name]; // -> Good -> 2
+      case 'neutral':
+        setNeutral(prevState => prevState + 1);
+        break;
 
-      return { [name]: prevStateValue + 1 };
-    });
+      case 'bad':
+        setBad(prevState => prevState + 1);
+        break;
+
+      default:
+        return;
+    }
   };
 
-  render() {
-    const { good, neutral, bad } = this.state;
-    console.log(good, neutral, bad);
-    return (
-      <div
-        style={{
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 40,
-          color: '#010101',
-        }}
-      >
-        <Section title="Please leave feedback">
-          <FeedbackOption options={options} onLeaveFeedback={this.onFeedback} />
-          {}
+  return (
+    <div
+      style={{
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 40,
+        color: '#010101',
+      }}
+    >
+      <Section title="Please leave feedback">
+        <FeedbackOption options={options} handleUpdate={handleUpdate} />
 
-          {this.countTotalFeedback() > 0 && (
-            <Statistics
-              title="Statistics"
-              good={good}
-              neutral={neutral}
-              bad={bad}
-              total={this.countTotalFeedback()}
-              positivePercentage={this.countPositiveFeedbackPercentage()}
-            />
-          )}
-        </Section>
-      </div>
-    );
-  }
+        {countTotalFeedback() > 0 && (
+          <Statistics
+            title="Statistics"
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            total={countTotalFeedback()}
+            positivePercentage={countPositiveFeedbackPercentage()}
+          />
+        )}
+      </Section>
+    </div>
+  );
 }

@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import styles from './FeedBackOption.module.css';
 
-export function FeedbackOption({ options, onLeaveFeedback }) {
+export function FeedbackOption({ options, handleUpdate }) {
   return options.map(item => (
     <button
       className={styles.item}
       type="button"
       name={item.name}
       key={item.id}
-      onClick={onLeaveFeedback}
+      onClick={handleUpdate}
     >
       {item.title}
     </button>
@@ -23,5 +23,5 @@ FeedbackOption.propTypes = {
       id: PropTypes.number.isRequired,
     })
   ),
-  onLeaveFeedback: PropTypes.func.isRequired,
+  handleUpdate: PropTypes.func.isRequired,
 };
